@@ -3,6 +3,7 @@
     <v-app-bar
       aria-label="This is a toolbar with menu elements for large screen devices."
       app
+      dark
       elevation="24"
     >
       <v-toolbar-title>ABN Test</v-toolbar-title>
@@ -13,7 +14,7 @@
           v-for="(menuItem, index) in menuItems"
           :key="index"
           :to="menuItem.path"
-          color="purple darken-4"
+          color="purple lighten-4"
           exact
           link
           small
@@ -25,6 +26,7 @@
     <v-navigation-drawer
       v-model="drawer"
       aria-label="This is a sidenav with menu elements for mobile devices."
+      dark
       fixed
       right
     >
@@ -34,7 +36,7 @@
             v-for="(menuItem, index) in menuItems"
             :key="index"
             :to="menuItem.path"
-            color="purple darken-4"
+            color="purple lighten-4"
             exact
             link
             two-line
