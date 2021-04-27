@@ -12,6 +12,9 @@
 
       <v-col class="mb-4">
         <h1 class="display-2 font-weight-bold mb-3">Welcome to Vuetify</h1>
+        <form @submit.prevent="submitForm">
+          <button>Send Message</button>
+        </form>
       </v-col>
     </v-row>
   </v-container>
@@ -22,5 +25,10 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "HelloWorld",
+  methods: {
+    submitForm() {
+      this.$store.dispatch("requests/fetchRequests");
+    },
+  },
 });
 </script>

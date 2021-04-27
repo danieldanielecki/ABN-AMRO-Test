@@ -5,4 +5,9 @@ describe("My First Test", () => {
     cy.visit("/");
     cy.contains("h1", "Welcome to Vuetify");
   });
+
+  it("Visits about url", () => {
+    cy.visit("/about");
+    cy.contains("h1", "This is an about page");
+  });
 });
