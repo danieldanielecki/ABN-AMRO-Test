@@ -7,6 +7,7 @@ export default {
         genres: [];
         images: Record<string, unknown>;
         language: string;
+        name: string;
         officialSite: string;
         premiered: string;
         rating: number;
