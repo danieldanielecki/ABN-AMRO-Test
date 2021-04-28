@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import TVShows from "@/components/TVShows.vue"; // @ is an alias to /src
+import TVShows from "@/pages/TVShows.vue"; // @ is an alias to /src
 
 export default Vue.extend({
   name: "Home",

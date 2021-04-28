@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import TVShows from "@/components/TVShows.vue";
+import TVShows from "@/pages/TVShows.vue";
 
 describe("TVShows.vue", () => {
   it("renders props.msg when passed", () => {
