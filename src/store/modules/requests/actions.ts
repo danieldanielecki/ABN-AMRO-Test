@@ -36,6 +36,7 @@ export default {
         genres: responseData[key].genres,
         images: responseData[key].image,
         language: responseData[key].language,
+        name: responseData[key].name,
         officialSite: responseData[key].officialSite,
         premiered: responseData[key].premiered,
         rating: responseData[key].rating.average,
