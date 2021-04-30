@@ -92,7 +92,7 @@ export default Vue.extend({
   },
   created() {
     this.selectedTVShow = this.$store.getters["requests/TVShows"].find(
-      (coach) => coach.id === +this.id
+      (TVItem) => TVItem.id === +this.id
     );
   },
 });
