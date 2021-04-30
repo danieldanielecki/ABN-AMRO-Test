@@ -70,7 +70,6 @@
       <p>Premiered: {{ selectedTVShow.premiered }}</p>
       <p>Status: {{ selectedTVShow.status }}</p>
       <p>Type: {{ selectedTVShow.type }}</p>
-      {{ id }}
     </v-card>
   </v-row>
 </template>
