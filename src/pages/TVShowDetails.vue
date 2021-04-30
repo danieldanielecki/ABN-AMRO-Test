@@ -85,11 +85,6 @@ export default Vue.extend({
     selection: 1,
     selectedTVShow: null,
   }),
-  computed: {
-    imagePath() {
-      return this.selectedTVShow.images.medium;
-    },
-  },
   created() {
     this.selectedTVShow = this.$store.getters["requests/TVShows"].find(
       (TVItem) => TVItem.id === +this.id
