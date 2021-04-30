@@ -28,7 +28,7 @@
           :key="genre"
           v-for="genre in selectedTVShow.genres"
         >
-          {{ selectedTVShow.genre }}
+          {{ genre }}
         </div>
         <div v-html="selectedTVShow.summary">
           {{ selectedTVShow.summary }}
@@ -43,8 +43,7 @@
           column
         >
           <v-chip :key="day" v-for="day in selectedTVShow.schedule.days"
-            >{{ selectedTVShow.day }} -
-            {{ selectedTVShow.schedule.time }}</v-chip
+            >{{ day }} - {{ selectedTVShow.schedule.time }}</v-chip
           >
         </v-chip-group>
       </v-card-text>

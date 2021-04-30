@@ -1,24 +1,32 @@
 <template>
   <v-container>
-    <v-row class="text-center">
-      <TVShow
-        v-for="TVShow in TVShows"
-        :key="TVShow.id"
-        :id="TVShow.id"
-        :genres="TVShow.genres"
-        :images="TVShow.images"
-        :language="TVShow.language"
-        :name="TVShow.name"
-        :officialSite="TVShow.officialSite"
-        :premiered="TVShow.premiered"
-        :rating="TVShow.rating"
-        :schedule="TVShow.schedule"
-        :status="TVShow.status"
-        :summary="TVShow.summary"
-        :type="TVShow.type"
-        :url="TVShow.url"
-      ></TVShow>
-    </v-row>
+    <v-sheet
+      class="mx-auto text-center"
+      elevation="8"
+      v-for="category in categories"
+      :key="category"
+    >
+      <h1>{{ category }}</h1>
+      <v-slide-group class="pa-4" active-class="success" show-arrows>
+        <div v-for="TVShow in TVShows" :key="TVShow.id">
+          <div
+            class="my-4 subtitle-1"
+            :key="genre"
+            v-for="genre in TVShow.genres"
+          >
+            <v-slide-item v-if="category === genre">
+              <TVShow
+                :id="TVShow.id"
+                :images="TVShow.images"
+                :name="TVShow.name"
+                :rating="TVShow.rating"
+              ></TVShow>
+            </v-slide-item>
+          </div>
+        </div>
+      </v-slide-group>
+      <br />
+    </v-sheet>
   </v-container>
 </template>
 
@@ -36,11 +44,18 @@ export default Vue.extend({
     TVShows() {
       return this.$store.getters["requests/TVShows"];
     },
-    TVShowsCount() {
-      return this.TVShows.length;
+    categories() {
+      const arrayMe: Set<unknown> = new Set();
+      const filtered = this.$store.getters["requests/TVShows"];
+
+      filtered.filter((item: any) => {
+        item.genres.forEach((element: string) => {
+          arrayMe.add(element);
+        });
+      });
+      return [...arrayMe];
     },
   },
-
   methods: {
     async loadRequests() {
       this.$store.dispatch("requests/fetchRequests");

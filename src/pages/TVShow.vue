@@ -17,21 +17,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  props: [
-    "id",
-    "genres",
-    "images",
-    "language",
-    "name",
-    "officialSite",
-    "premiered",
-    "rating",
-    "schedule",
-    "status",
-    "summary",
-    "type",
-    "url",
-  ],
+  props: ["id", "images", "name", "rating"],
   name: "TVShow",
   computed: {
     TVShowLink() {
