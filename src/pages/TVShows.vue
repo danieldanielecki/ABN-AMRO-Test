@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-text-field placeholder="Search title.." v-model="search"></v-text-field>
     <v-sheet
       class="mx-auto text-center"
       elevation="8"
@@ -8,7 +9,7 @@
     >
       <h1>{{ category }}</h1>
       <v-slide-group class="pa-4" active-class="success" show-arrows>
-        <div v-for="TVShow in TVShows" :key="TVShow.id">
+        <div v-for="TVShow in filteredList" :key="TVShow.id">
           <div
             class="my-4 subtitle-1"
             :key="genre"
@@ -40,6 +41,9 @@ export default Vue.extend({
   created() {
     this.loadRequests();
   },
+  data: () => ({
+    search: "",
+  }),
   computed: {
     TVShows() {
       return this.$store.getters["requests/TVShows"];
@@ -54,6 +58,11 @@ export default Vue.extend({
         });
       });
       return [...arrayMe];
+    },
+    filteredList() {
+      return this.TVShows.filter((post) => {
+        return post.name.toLowerCase().includes(this.search.toLowerCase());
+      });
     },
   },
   methods: {
