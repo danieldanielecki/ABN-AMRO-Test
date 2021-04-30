@@ -9,6 +9,20 @@
     </template>
     <v-img height="250" :src="images.medium"></v-img>
     <v-card-title>{{ name }}</v-card-title>
+    <v-card-text>
+      <v-row align="center" class="mx-0">
+        <v-rating
+          :value="rating"
+          color="amber"
+          dense
+          half-increments
+          length="10"
+          readonly
+          size="20"
+        ></v-rating>
+        <div class="grey--text ml-4">{{ rating }}</div>
+      </v-row>
+    </v-card-text>
     <button><router-link :to="TVShowLink">Details</router-link></button>
   </v-card>
 </template>
