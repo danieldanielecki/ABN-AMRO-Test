@@ -17,6 +17,7 @@
     >
       <v-img
         max-height="750"
+        :alt="getSelectedTVShow(id).name"
         :lazy-src="getSelectedTVShow(id).images.medium"
         :src="getSelectedTVShow(id).images.original"
       ></v-img>
@@ -100,7 +101,6 @@ export default Vue.extend({
     isLoading: false,
   }),
   computed: {
-    ...mapActions("requests", ["fetchRequests"]),
     ...mapGetters("requests", ["getSelectedTVShow", "hasRequestedObjects"]),
     ...mapState("requests", ["requests"]),
   },
@@ -110,11 +110,12 @@ export default Vue.extend({
     }
   },
   methods: {
+    ...mapActions("requests", ["fetchRequests"]),
     async loadRequest() {
       this.isLoading = true;
 
       try {
-        await this.fetchRequests;
+        await this.fetchRequests();
       } catch (error) {
         this.error = error.message || "Something failed!";
       }

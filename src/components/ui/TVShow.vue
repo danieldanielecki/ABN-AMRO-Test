@@ -9,6 +9,7 @@
     </template>
     <v-img
       max-height="350"
+      :alt="name"
       :lazy-src="images.medium"
       :src="images.original"
     ></v-img>
@@ -56,7 +57,7 @@ export default Vue.extend({
   name: "TVShow",
   computed: {
     TVShowLink() {
-      return this.$route.path + "tv-shows/" + this.id;
+      return `${this.$route.path}tv-shows/${this.id}`;
     },
   },
   data: () => ({

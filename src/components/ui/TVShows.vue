@@ -84,7 +84,6 @@ export default Vue.extend({
     searchQuery: "",
   }),
   computed: {
-    ...mapActions("requests", ["fetchRequests"]),
     ...mapGetters("requests", [
       "getCategories",
       "getFilteredTVShowsList",
@@ -93,11 +92,12 @@ export default Vue.extend({
     ...mapState("requests", ["requests"]),
   },
   methods: {
+    ...mapActions("requests", ["fetchRequests"]),
     async loadRequests() {
       this.isLoading = true;
 
       try {
-        await this.fetchRequests;
+        await this.fetchRequests();
       } catch (error) {
         this.error = error.message || "Something failed!";
       }

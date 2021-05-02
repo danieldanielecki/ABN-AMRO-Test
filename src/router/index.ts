@@ -1,8 +1,8 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
-import NotFound from "../components/pages/NotFound.vue";
-import TVShowDetails from "../pages/TVShowDetails.vue";
+import NotFound from "../views/NotFound.vue";
+import TVShowDetails from "../components/ui/TVShowDetails.vue";
 
 Vue.use(VueRouter);
 
@@ -25,7 +25,7 @@ const routes: Array<RouteConfig> = [
     path: "/tv-shows",
     component: () =>
       import(
-        /* webpackChunkName: "tvshowdetails" */ "../pages/TVShowDetails.vue"
+        /* webpackChunkName: "tvshowdetails" */ "../components/ui/TVShowDetails.vue"
       ),
     props: true,
     children: [{ path: ":id", component: TVShowDetails }],
