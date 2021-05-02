@@ -21,7 +21,10 @@
           color="purple"
           class="text-center"
         ></v-progress-circular>
-        <v-lazy transition="fade-transition">
+        <v-lazy
+          v-else-if="hasRequestedObjects && !isLoading"
+          transition="fade-transition"
+        >
           <v-slide-group class="pa-4" active-class="success" show-arrows>
             <div
               v-for="TVShow in getFilteredTVShowsList(searchQuery)"
@@ -44,6 +47,7 @@
             </div>
           </v-slide-group>
         </v-lazy>
+        <h1 v-else>No TV shows found.</h1>
         <br />
       </v-sheet>
     </v-card>

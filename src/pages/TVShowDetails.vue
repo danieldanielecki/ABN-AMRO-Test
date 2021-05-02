@@ -1,10 +1,15 @@
 <template>
   <v-row>
-    <h1 v-if="!hasRequestedObjects">No TV Shows</h1>
+    <v-progress-circular
+      v-if="isLoading"
+      indeterminate
+      color="purple"
+      class="text-center"
+    ></v-progress-circular>
     <v-card
       class="mx-auto my-12"
       max-width="874"
-      v-else-if="hasRequestedObjects"
+      v-else-if="hasRequestedObjects && !isLoading"
       elevation="24"
     >
       <v-img
@@ -73,6 +78,7 @@
       <p>Status: {{ selectedTVShow.status }}</p>
       <p>Type: {{ selectedTVShow.type }}</p>
     </v-card>
+    <h1 v-else>No TV shows found.</h1>
   </v-row>
 </template>
 
@@ -89,6 +95,7 @@ export default Vue.extend({
   },
   name: "TVShowDetails",
   data: () => ({
+    isLoading: false,
     selection: 1,
     selectedTVShow: null,
   }),
@@ -102,6 +109,8 @@ export default Vue.extend({
   },
   methods: {
     async loadRequest() {
+      this.isLoading = true;
+
       try {
         await this.fetchRequests;
 
@@ -111,6 +120,7 @@ export default Vue.extend({
       } catch (error) {
         console.log("wrong");
       }
+      this.isLoading = false;
     },
   },
   deactivated() {
