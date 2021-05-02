@@ -1,4 +1,7 @@
 export default {
+  hasRequestedObjects(state: { requests: any }) {
+    return state.requests && state.requests.length > 0;
+  },
   getCategories(state: { requests: any }) {
     const categories: Set<unknown> = new Set();
     const TVShows = state.requests;
@@ -13,6 +16,13 @@ export default {
   getFilteredTVShowsList: (state: { requests: any }) => (
     searchQuery: string
   ) => {
+    const TVShows = state.requests;
+
+    return TVShows.filter((TVShowItem: any) => {
+      return TVShowItem.name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  },
+  getSelectedTVShow: (state: { requests: any }) => (searchQuery: string) => {
     const TVShows = state.requests;
 
     return TVShows.filter((TVShowItem: any) => {

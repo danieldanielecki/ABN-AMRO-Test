@@ -1,6 +1,12 @@
 <template>
   <v-row>
-    <v-card class="mx-auto my-12" max-width="874">
+    <h1 v-if="!hasRequestedObjects">No TV Shows</h1>
+    <v-card
+      class="mx-auto my-12"
+      max-width="874"
+      v-else-if="hasRequestedObjects"
+      elevation="24"
+    >
       <v-img
         max-height="750"
         :lazy-src="selectedTVShow.images.medium"
@@ -72,7 +78,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default Vue.extend({
   props: {
@@ -88,6 +94,7 @@ export default Vue.extend({
   }),
   computed: {
     ...mapActions("requests", ["fetchRequests"]),
+    ...mapGetters("requests", ["hasRequestedObjects"]),
     ...mapState("requests", ["requests"]),
   },
   async created() {
@@ -105,6 +112,9 @@ export default Vue.extend({
         console.log("wrong");
       }
     },
+  },
+  deactivated() {
+    this.$destroy(); // Otherwise due to usage of "<keep-alive>" the firstly loaded TV show is displayed for all dynamic routes.
   },
 });
 </script>
