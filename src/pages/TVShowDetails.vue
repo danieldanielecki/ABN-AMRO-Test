@@ -1,5 +1,8 @@
 <template>
-  <v-row>
+  <v-container>
+    <base-dialog :show="!!error" title="An error occurred" @close="handleError">
+      <p>Error details: "{{ error }}"</p>
+    </base-dialog>
     <v-progress-circular
       v-if="isLoading"
       indeterminate
@@ -7,21 +10,21 @@
       class="text-center"
     ></v-progress-circular>
     <v-card
+      v-else-if="hasRequestedObjects && !isLoading"
       class="mx-auto my-12"
       max-width="874"
-      v-else-if="hasRequestedObjects && !isLoading"
       elevation="24"
     >
       <v-img
         max-height="750"
-        :lazy-src="selectedTVShow.images.medium"
-        :src="selectedTVShow.images.original"
+        :lazy-src="getSelectedTVShow(id).images.medium"
+        :src="getSelectedTVShow(id).images.original"
       ></v-img>
-      <v-card-title>{{ selectedTVShow.name }}</v-card-title>
+      <v-card-title>{{ getSelectedTVShow(id).name }}</v-card-title>
       <v-card-text>
         <v-row align="center" class="mx-0">
           <v-rating
-            :value="selectedTVShow.rating"
+            :value="getSelectedTVShow(id).rating"
             color="amber"
             dense
             half-increments
@@ -29,36 +32,32 @@
             readonly
             size="20"
           ></v-rating>
-          <div class="grey--text ml-4">{{ selectedTVShow.rating }}</div>
+          <div class="grey--text ml-4">{{ getSelectedTVShow(id).rating }}</div>
         </v-row>
         <div
           class="my-4 subtitle-1"
           :key="genre"
-          v-for="genre in selectedTVShow.genres"
+          v-for="genre in getSelectedTVShow(id).genres"
         >
           {{ genre }}
         </div>
-        <div v-html="selectedTVShow.summary">
-          {{ selectedTVShow.summary }}
+        <div v-html="getSelectedTVShow(id).summary">
+          {{ getSelectedTVShow(id).summary }}
         </div>
       </v-card-text>
       <v-divider class="mx-4"></v-divider>
       <v-card-title>Schedule &amp; Info</v-card-title>
       <v-card-text>
-        <v-chip-group
-          v-model="selection"
-          active-class="deep-purple accent-4 white--text"
-          column
-        >
-          <v-chip :key="day" v-for="day in selectedTVShow.schedule.days"
-            >{{ day }} - {{ selectedTVShow.schedule.time }}</v-chip
+        <v-chip-group active-class="deep-purple accent-4 white--text" column>
+          <v-chip :key="day" v-for="day in getSelectedTVShow(id).schedule.days"
+            >{{ day }} - {{ getSelectedTVShow(id).schedule.time }}</v-chip
           >
         </v-chip-group>
       </v-card-text>
       <v-card-actions>
         <v-btn color="deep-purple lighten-2" text>
           <a
-            :href="selectedTVShow.url"
+            :href="getSelectedTVShow(id).url"
             target="_blank"
             rel="noreferrer noopener"
             >Watch
@@ -66,20 +65,22 @@
         </v-btn>
         <v-btn color="deep-purple lighten-2" text>
           <a
-            :href="selectedTVShow.officialSite"
+            :href="getSelectedTVShow(id).officialSite"
             target="_blank"
             rel="noreferrer noopener"
             >Official Website
           </a>
         </v-btn>
       </v-card-actions>
-      <p>Language: {{ selectedTVShow.language }}</p>
-      <p>Premiered: {{ selectedTVShow.premiered }}</p>
-      <p>Status: {{ selectedTVShow.status }}</p>
-      <p>Type: {{ selectedTVShow.type }}</p>
+      <div class="ml-4">
+        <p>Language: {{ getSelectedTVShow(id).language }}</p>
+        <p>Premiered: {{ getSelectedTVShow(id).premiered }}</p>
+        <p>Status: {{ getSelectedTVShow(id).status }}</p>
+        <p>Type: {{ getSelectedTVShow(id).type }}</p>
+      </div>
     </v-card>
-    <h1 v-else>No TV shows found.</h1>
-  </v-row>
+    <h1 class="text-center ma-12" v-else>No TV shows found.</h1>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -95,17 +96,18 @@ export default Vue.extend({
   },
   name: "TVShowDetails",
   data: () => ({
+    error: null,
     isLoading: false,
-    selection: 1,
-    selectedTVShow: null,
   }),
   computed: {
     ...mapActions("requests", ["fetchRequests"]),
-    ...mapGetters("requests", ["hasRequestedObjects"]),
+    ...mapGetters("requests", ["getSelectedTVShow", "hasRequestedObjects"]),
     ...mapState("requests", ["requests"]),
   },
   async created() {
-    await this.loadRequest();
+    if (!this.hasRequestedObjects) {
+      await this.loadRequest();
+    }
   },
   methods: {
     async loadRequest() {
@@ -113,14 +115,13 @@ export default Vue.extend({
 
       try {
         await this.fetchRequests;
-
-        this.selectedTVShow = await this.requests.find(
-          (TVItem) => TVItem.id === +this.id
-        );
       } catch (error) {
-        console.log("wrong");
+        this.error = error.message || "Something failed!";
       }
       this.isLoading = false;
+    },
+    handleError() {
+      this.error = null;
     },
   },
   deactivated() {

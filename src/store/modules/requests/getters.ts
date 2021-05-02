@@ -22,11 +22,11 @@ export default {
       return TVShowItem.name.toLowerCase().includes(searchQuery.toLowerCase());
     });
   },
-  getSelectedTVShow: (state: { requests: any }) => (searchQuery: string) => {
+  getSelectedTVShow: (state: { requests: any }) => (id: string) => {
     const TVShows = state.requests;
 
-    return TVShows.filter((TVShowItem: any) => {
-      return TVShowItem.name.toLowerCase().includes(searchQuery.toLowerCase());
-    });
+    return TVShows.find(
+      (TVItem: any) => TVItem.id === +id // Convert "this.id" to a number.
+    );
   },
 };

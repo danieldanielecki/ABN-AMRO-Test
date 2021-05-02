@@ -1,7 +1,20 @@
 <template>
   <v-container>
-    <h1 v-if="!hasRequestedObjects">No TV Shows</h1>
-    <v-card v-else-if="hasRequestedObjects" class="ma-12 pa-12" elevation="24">
+    <base-dialog :show="!!error" title="An error occurred" @close="handleError">
+      <p>Error details: "{{ error }}"</p>
+    </base-dialog>
+    <v-progress-circular
+      v-if="isLoading"
+      indeterminate
+      color="purple"
+      class="text-center"
+    ></v-progress-circular>
+    <v-card
+      v-else-if="hasRequestedObjects && !isLoading"
+      class="ma-2 pa-12"
+      elevation="12"
+    >
+      <h1 class="text-center">TV Shows</h1>
       <v-text-field
         placeholder="Search title.."
         v-model="searchQuery"
@@ -14,7 +27,7 @@
         v-for="category in getCategories"
         :key="category"
       >
-        <h1>{{ category }}</h1>
+        <h2>{{ category }}</h2>
         <v-progress-circular
           v-if="isLoading"
           indeterminate
@@ -25,7 +38,7 @@
           v-else-if="hasRequestedObjects && !isLoading"
           transition="fade-transition"
         >
-          <v-slide-group class="pa-4" active-class="success" show-arrows>
+          <v-slide-group class="pa-4" show-arrows>
             <div
               v-for="TVShow in getFilteredTVShowsList(searchQuery)"
               :key="TVShow.id"
@@ -47,10 +60,10 @@
             </div>
           </v-slide-group>
         </v-lazy>
-        <h1 v-else>No TV shows found.</h1>
         <br />
       </v-sheet>
     </v-card>
+    <h1 class="text-center ma-12" v-else>No TV shows found.</h1>
   </v-container>
 </template>
 
@@ -66,6 +79,7 @@ export default Vue.extend({
     await this.loadRequests();
   },
   data: () => ({
+    error: null,
     isLoading: false,
     searchQuery: "",
   }),
@@ -85,13 +99,16 @@ export default Vue.extend({
       try {
         await this.fetchRequests;
       } catch (error) {
-        console.log("wrong");
+        this.error = error.message || "Something failed!";
       }
 
       this.isLoading = false;
     },
     clearSearchQuery() {
       this.searchQuery = "";
+    },
+    handleError() {
+      this.error = null;
     },
   },
 });

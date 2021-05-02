@@ -27,7 +27,7 @@
         <div class="grey--text ml-4">{{ rating }}</div>
       </v-row>
     </v-card-text>
-    <button><router-link :to="TVShowLink">Details</router-link></button>
+    <v-btn outlined color="purple" class="ma-6" :to="TVShowLink">Details</v-btn>
   </v-card>
 </template>
 
@@ -61,7 +61,6 @@ export default Vue.extend({
   },
   data: () => ({
     loading: false,
-    selection: 1,
   }),
 });
 </script>
