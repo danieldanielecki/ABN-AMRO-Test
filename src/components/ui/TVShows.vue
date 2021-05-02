@@ -69,7 +69,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import TVShow from "./TVShow.vue";
 
 export default Vue.extend({

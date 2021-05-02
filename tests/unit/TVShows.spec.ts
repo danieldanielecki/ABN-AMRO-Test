@@ -1,5 +1,6 @@
 import { createLocalVue, shallowMount } from "@vue/test-utils";
 import Vuex from "vuex";
+import BaseDialog from "@/components/ui/BaseDialog.vue";
 import TVShows from "@/components/ui/TVShows.vue";
 
 describe("TVShows.vue", () => {
@@ -28,14 +29,20 @@ describe("TVShows.vue", () => {
   });
   const wrapper = shallowMount(TVShows, { localVue, store });
 
-  // it("renders props.msg when passed", () => {
-  //   const msg = "Welcome to Vuetify";
-  //   const wrapper = shallowMount(TVShows, {
-  //     propsData: { msg },
-  //   });
-  //   expect(wrapper.text()).toMatch(msg);
-  // });
   it("should mount", () => {
     expect(wrapper.exists()).toBe(true);
+  });
+
+  it("should have BaseDialog", () => {
+    const baseDialog = wrapper.findComponent(BaseDialog);
+    expect(baseDialog.exists()).toBe(true);
+  });
+
+  it("should call 'fetchRequests' action", async () => {
+    expect(await actions.fetchRequests).toHaveBeenCalled();
+  });
+
+  it("should call 'hasRequestedObjects' getter", async () => {
+    expect(await getters.hasRequestedObjects).toHaveBeenCalled();
   });
 });
