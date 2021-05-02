@@ -7,7 +7,11 @@
         indeterminate
       ></v-progress-linear>
     </template>
-    <v-img height="250" :src="images.medium"></v-img>
+    <v-img
+      max-height="350"
+      :lazy-src="images.medium"
+      :src="images.original"
+    ></v-img>
     <v-card-title>{{ name }}</v-card-title>
     <v-card-text>
       <v-row align="center" class="mx-0">
@@ -31,7 +35,24 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  props: ["id", "images", "name", "rating"],
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+    images: {
+      type: Object,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    rating: {
+      type: Number,
+      required: true,
+    },
+  },
   name: "TVShow",
   computed: {
     TVShowLink() {

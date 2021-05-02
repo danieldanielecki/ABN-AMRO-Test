@@ -1,31 +1,45 @@
 <template>
   <v-container>
-    <v-text-field placeholder="Search title.." v-model="search"></v-text-field>
+    <v-text-field
+      placeholder="Search title.."
+      v-model="searchQuery"
+      clearable
+      @click:clear="clearSearchQuery()"
+    ></v-text-field>
+
     <v-sheet
       class="mx-auto text-center"
       elevation="8"
-      v-for="category in categories"
+      v-for="category in getCategories"
       :key="category"
     >
       <h1>{{ category }}</h1>
-      <v-slide-group class="pa-4" active-class="success" show-arrows>
-        <div v-for="TVShow in filteredList" :key="TVShow.id">
-          <div
-            class="my-4 subtitle-1"
-            :key="genre"
-            v-for="genre in TVShow.genres"
-          >
-            <v-slide-item v-if="category === genre">
-              <TVShow
-                :id="TVShow.id"
-                :images="TVShow.images"
-                :name="TVShow.name"
-                :rating="TVShow.rating"
-              ></TVShow>
-            </v-slide-item>
+      <v-progress-circular
+        v-if="isLoading"
+        indeterminate
+        color="purple"
+        class="text-center"
+      ></v-progress-circular>
+      <v-lazy transition="fade-transition">
+        <v-slide-group class="pa-4" active-class="success" show-arrows>
+          <div v-for="TVShow in filteredList" :key="TVShow.id">
+            <div
+              class="my-4 subtitle-1"
+              :key="genre"
+              v-for="genre in TVShow.genres"
+            >
+              <v-slide-item v-if="category === genre">
+                <TVShow
+                  :id="TVShow.id"
+                  :images="TVShow.images"
+                  :name="TVShow.name"
+                  :rating="TVShow.rating"
+                ></TVShow>
+              </v-slide-item>
+            </div>
           </div>
-        </div>
-      </v-slide-group>
+        </v-slide-group>
+      </v-lazy>
       <br />
     </v-sheet>
   </v-container>
@@ -33,41 +47,42 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { mapGetters, mapState } from "vuex";
 import TVShow from "./TVShow.vue";
 
 export default Vue.extend({
   name: "TVShows",
   components: { TVShow },
-  created() {
-    this.loadRequests();
+  async created() {
+    await this.loadRequests();
   },
   data: () => ({
-    search: "",
+    isLoading: false,
+    searchQuery: "",
   }),
   computed: {
-    TVShows() {
-      return this.$store.getters["requests/TVShows"];
-    },
-    categories() {
-      const arrayMe: Set<unknown> = new Set();
-      const filtered = this.$store.getters["requests/TVShows"];
-
-      filtered.filter((item: any) => {
-        item.genres.forEach((element: string) => {
-          arrayMe.add(element);
-        });
-      });
-      return [...arrayMe];
-    },
+    ...mapGetters("requests", ["getTVShows", "getCategories"]),
+    // ...mapState("requests", ["fetchRequests"]), // Spinner stops working.
     filteredList() {
-      return this.TVShows.filter((post) => {
-        return post.name.toLowerCase().includes(this.search.toLowerCase());
+      return this.getTVShows.filter((TVShowItem) => {
+        return TVShowItem.name
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase());
       });
     },
   },
   methods: {
     async loadRequests() {
-      this.$store.dispatch("requests/fetchRequests");
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch("requests/fetchRequests");
+      } catch (error) {
+        console.log("wrong");
+      }
+      this.isLoading = false;
+    },
+    clearSearchQuery() {
+      this.searchQuery = "";
     },
   },
 });

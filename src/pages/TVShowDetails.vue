@@ -1,14 +1,11 @@
 <template>
   <v-row>
-    <v-card :loading="loading" class="mx-auto my-12" max-width="874">
-      <template slot="progress">
-        <v-progress-linear
-          color="deep-purple"
-          height="10"
-          indeterminate
-        ></v-progress-linear>
-      </template>
-      <v-img height="250" :src="selectedTVShow.images.medium"></v-img>
+    <v-card class="mx-auto my-12" max-width="874">
+      <v-img
+        max-height="750"
+        :lazy-src="selectedTVShow.images.medium"
+        :src="selectedTVShow.images.original"
+      ></v-img>
       <v-card-title>{{ selectedTVShow.name }}</v-card-title>
       <v-card-text>
         <v-row align="center" class="mx-0">
@@ -75,18 +72,38 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { mapGetters, mapState } from "vuex";
+
 export default Vue.extend({
-  props: ["id"],
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   name: "TVShowDetails",
   data: () => ({
-    loading: false,
     selection: 1,
     selectedTVShow: null,
   }),
-  created() {
-    this.selectedTVShow = this.$store.getters["requests/TVShows"].find(
-      (TVItem) => TVItem.id === +this.id
-    );
+  computed: {
+    ...mapGetters("requests", ["getTVShows"]),
+    // ...mapState("requests", ["fetchRequests"]), // On preload it doesn't load
+  },
+  async created() {
+    await this.loadRequest();
+  },
+  methods: {
+    async loadRequest() {
+      try {
+        await this.$store.dispatch("requests/fetchRequests");
+        this.selectedTVShow = await this.getTVShows.find(
+          (TVItem) => TVItem.id === +this.id
+        );
+      } catch (error) {
+        console.log("wrong");
+      }
+    },
   },
 });
 </script>
