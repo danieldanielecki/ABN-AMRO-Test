@@ -10,14 +10,13 @@ export default {
     });
     return categories;
   },
-  getFilteredTVShowsList(state: { requests: any }, searchQuery: any) {
+  getFilteredTVShowsList: (state: { requests: any }) => (
+    searchQuery: string
+  ) => {
     const TVShows = state.requests;
 
     return TVShows.filter((TVShowItem: any) => {
-      return TVShowItem.name
-        .toString()
-        .toLowerCase()
-        .includes(searchQuery.toString().toLowerCase());
+      return TVShowItem.name.toLowerCase().includes(searchQuery.toLowerCase());
     });
   },
 };
