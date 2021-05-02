@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import TVShow from "./TVShow.vue";
 
 export default Vue.extend({
@@ -61,24 +61,28 @@ export default Vue.extend({
     searchQuery: "",
   }),
   computed: {
-    ...mapGetters("requests", ["getTVShows", "getCategories"]),
-    // ...mapState("requests", ["fetchRequests"]), // Spinner stops working.
+    ...mapActions("requests", ["fetchRequests"]),
+    ...mapGetters("requests", ["getCategories", "getFilteredTVShowsList"]),
+    ...mapState("requests", ["requests"]),
     filteredList() {
-      return this.getTVShows.filter((TVShowItem) => {
-        return TVShowItem.name
-          .toLowerCase()
-          .includes(this.searchQuery.toLowerCase());
-      });
+      // return this.requests.filter((TVShowItem: any) => {
+      //   return TVShowItem.name
+      //     .toLowerCase()
+      //     .includes(this.searchQuery.toLowerCase());
+      // });
+      return this.getFilteredTVShowsList(this.searchQuery);
     },
   },
   methods: {
     async loadRequests() {
       this.isLoading = true;
+
       try {
-        await this.$store.dispatch("requests/fetchRequests");
+        await this.fetchRequests;
       } catch (error) {
         console.log("wrong");
       }
+
       this.isLoading = false;
     },
     clearSearchQuery() {

@@ -72,7 +72,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default Vue.extend({
   props: {
@@ -87,17 +87,18 @@ export default Vue.extend({
     selectedTVShow: null,
   }),
   computed: {
-    ...mapGetters("requests", ["getTVShows"]),
-    // ...mapState("requests", ["fetchRequests"]), // On preload it doesn't load
+    ...mapState("requests", ["requests"]),
   },
   async created() {
     await this.loadRequest();
   },
   methods: {
+    ...mapActions("requests", ["fetchRequests"]),
     async loadRequest() {
       try {
-        await this.$store.dispatch("requests/fetchRequests");
-        this.selectedTVShow = await this.getTVShows.find(
+        await this.fetchRequests;
+
+        this.selectedTVShow = await this.requests.find(
           (TVItem) => TVItem.id === +this.id
         );
       } catch (error) {

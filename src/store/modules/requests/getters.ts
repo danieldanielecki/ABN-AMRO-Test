@@ -1,10 +1,7 @@
 export default {
-  getTVShows(state: { requests: any }) {
-    return state.requests;
-  },
-  getCategories(_: null, getters: { getTVShows: any }) {
+  getCategories(state: { requests: any }) {
     const categories: Set<unknown> = new Set();
-    const TVShows = getters.getTVShows;
+    const TVShows = state.requests;
 
     TVShows.filter((item: any) => {
       item.genres.forEach((element: string) => {
@@ -12,5 +9,15 @@ export default {
       });
     });
     return categories;
+  },
+  getFilteredTVShowsList(state: { requests: any }, searchQuery: any) {
+    const TVShows = state.requests;
+
+    return TVShows.filter((TVShowItem: any) => {
+      return TVShowItem.name
+        .toString()
+        .toLowerCase()
+        .includes(searchQuery.toString().toLowerCase());
+    });
   },
 };
