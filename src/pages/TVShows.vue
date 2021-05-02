@@ -22,7 +22,10 @@
       ></v-progress-circular>
       <v-lazy transition="fade-transition">
         <v-slide-group class="pa-4" active-class="success" show-arrows>
-          <div v-for="TVShow in filteredListOfTVShows" :key="TVShow.id">
+          <div
+            v-for="TVShow in getFilteredTVShowsList(searchQuery)"
+            :key="TVShow.id"
+          >
             <div
               class="my-4 subtitle-1"
               :key="genre"
@@ -64,9 +67,6 @@ export default Vue.extend({
     ...mapActions("requests", ["fetchRequests"]),
     ...mapGetters("requests", ["getCategories", "getFilteredTVShowsList"]),
     ...mapState("requests", ["requests"]),
-    filteredListOfTVShows() {
-      return this.getFilteredTVShowsList(this.searchQuery);
-    },
   },
   methods: {
     async loadRequests() {

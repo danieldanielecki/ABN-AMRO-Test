@@ -87,13 +87,13 @@ export default Vue.extend({
     selectedTVShow: null,
   }),
   computed: {
+    ...mapActions("requests", ["fetchRequests"]),
     ...mapState("requests", ["requests"]),
   },
   async created() {
     await this.loadRequest();
   },
   methods: {
-    ...mapActions("requests", ["fetchRequests"]),
     async loadRequest() {
       try {
         await this.fetchRequests;
