@@ -73,7 +73,7 @@
           </a>
         </v-btn>
       </v-card-actions>
-      <div class="ml-4">
+      <div class="ml-4 pb-4">
         <p>Language: {{ getSelectedTVShow(id).language }}</p>
         <p>Premiered: {{ getSelectedTVShow(id).premiered }}</p>
         <p>Status: {{ getSelectedTVShow(id).status }}</p>
@@ -102,7 +102,6 @@ export default Vue.extend({
   }),
   computed: {
     ...mapGetters("requests", ["getSelectedTVShow", "hasRequestedObjects"]),
-    ...mapState("requests", ["requests"]),
   },
   async created() {
     if (!this.hasRequestedObjects) {

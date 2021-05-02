@@ -1,10 +1,6 @@
 import { createLocalVue, shallowMount } from "@vue/test-utils";
-import Vue from "vue";
 import Vuex from "vuex";
-import Vuetify from "vuetify";
 import TVShows from "@/components/ui/TVShows.vue";
-
-Vue.use(Vuetify);
 
 describe("TVShows.vue", () => {
   const localVue = createLocalVue();
@@ -20,13 +16,17 @@ describe("TVShows.vue", () => {
   const state = {
     requests: jest.fn(),
   };
-  const store = new Vuex.Store({ actions, getters, state });
-  const wrapper = shallowMount(TVShows, { localVue, store });
-
-  let vuetify;
-  beforeEach(() => {
-    vuetify = new Vuetify();
+  const store = new Vuex.Store({
+    modules: {
+      requests: {
+        namespaced: true,
+        actions,
+        getters,
+        state,
+      },
+    },
   });
+  const wrapper = shallowMount(TVShows, { localVue, store });
 
   // it("renders props.msg when passed", () => {
   //   const msg = "Welcome to Vuetify";

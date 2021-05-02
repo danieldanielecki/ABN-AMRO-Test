@@ -89,7 +89,6 @@ export default Vue.extend({
       "getFilteredTVShowsList",
       "hasRequestedObjects",
     ]),
-    ...mapState("requests", ["requests"]),
   },
   methods: {
     ...mapActions("requests", ["fetchRequests"]),
