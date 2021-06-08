@@ -29,6 +29,13 @@ Your goal is to display a few popular TV shows based on their rating and genre o
 
 There is no limit for this. Design your application as you wish. But make sure you will focus on clean code, reusability, frontend beast practices. Show us that you know how to produce top notch applications.
 
+## Feedback
+
+Very positive, little improvements:
+
+1. UI-wise: outer `v-card` is redundant and add some spaces between TV Shows
+2. In [actions.ts](https://gitlab.com/danieldanielecki/abn-amro-test/-/blob/master/src/store/modules/requests/actions.ts), interface could've been used for `arg1` and `request`, as well as object destructuring for `request` (but... interviewer didn't know how to do it... so it's not that sure)
+
 ### Project setup
 
 ```
